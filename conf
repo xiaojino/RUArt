@@ -1,0 +1,99 @@
+RESUME
+MODEL_PATH conf~/model/ANLS_best_model.pt
+Task   test
+preprocess_ocr_name ocr_PMTD_ASTER,ES_ocr
+preprocess_od_name  OD_bottom-up
+PREV_ANS	2
+PREV_QUES	2
+
+score_name ANLS
+lable_way   lable_all_with_threshold
+score_threshold 0.5
+mask_score
+label_no_answer
+
+max_ocr_num 100
+max_od_num  30
+max_ocr_len 20
+max_od_len  10
+max_ocr_bert_len    30
+max_od_bert_len 10
+max_q_len   40
+max_q_bert_len  50
+
+GLOVE
+glove_dim 300
+FastText
+fast_dim 300
+fasttext_model ##
+q_embedding glove,pos,ent,bert
+ocr_embedding  fasttext,pos,ent,bert
+q_emb_initial glove
+ocr_emb_initial  fasttext
+
+loss    BCE_D1
+optimizer   #
+batch_size  16
+lr 0.001
+num_worker  0
+max_batch_num	3000
+epoch 30
+LN
+
+DROPOUT	0.3
+VARIATIONAL_DROPOUT
+
+BERT
+dropout_emb	0.4
+LOCK_BERT
+BERT_LINEAR_COMBINE
+BERT_tokenizer_file     ./source/BERT/bert-base-uncased/vocab.txt
+BERT_model_file ./source/BERT/bert-base-uncased/
+
+SEED	1033
+SPACY_FEATURE
+CONTEXT_RNN_HIDDEN_DIM	300
+
+MAX_WORD_PER_SENTENCE	30
+INIT_WORD_EMBEDDING_FILE	##
+
+QUES_SELF_ATTN
+max_len	15
+concat_rnn	False
+grad_clipping	 10
+do_seq_dropout
+TUNE_PARTIAL
+tune_partial	1000
+embedding_dim	300
+prealign_hidden	300
+PRE_ALIGN
+PRE_ALIGN_befor_rnn
+pos_dim	12
+ent_dim	8
+flow_hidden_size 300
+query_self_attn_hidden_size	300
+hidden_size	125
+deep_att_hidden_size_per_abstr	250
+deep_inter_att_use_CoVe	1
+in_rnn_layers	2
+highlvl_hidden_size	125
+question_high_lvl_rnn_layers	1
+char_emb_size	8
+char_hidden_size	50
+multi2one_hidden_size   300
+multi2one_bidir False
+
+position_dim    8
+position_mod    qk+
+pos_att_merge_mod   cat
+source_dir   STVQA_test3_PA_ES
+n_gram  2
+
+BuildTestVocabulary
+ocr_name_list   ocr_PMTD_ASTER,ocr_PMTD_ASTER_gram2
+od_name_list OD_bottom-up
+useES
+ES_ocr  ES_ocr
+ES_ocr_len  10
+ES_sort_way frequency
+ES_using_way    as_ocr
